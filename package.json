@@ -4,10 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-  "dev": "ts-node-dev --respawn src/index.ts",
-  "build": "tsc",
-  "start": "node dist/index.js"
-},
+    "dev": "ts-node-dev --respawn src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/adithyahemchand/job-board-backend.git"
@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/adithyahemchand/job-board-backend#readme",
   "dependencies": {
+    "dotenv": "^17.2.3",
     "express": "^5.2.1"
   },
   "devDependencies": {
