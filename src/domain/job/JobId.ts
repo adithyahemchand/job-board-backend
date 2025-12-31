@@ -1,3 +1,5 @@
+import { randomUUID } from "crypto";
+
 export class JobId {
   private readonly id: string;
 
@@ -6,6 +8,10 @@ export class JobId {
       throw new Error("JobId cannot be empty");
     }
     this.id = id;
+  }
+
+  static generate(): JobId {
+    return new JobId(randomUUID());
   }
 
   toString(): string {
