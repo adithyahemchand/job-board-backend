@@ -7,7 +7,7 @@ export class GetJobByIdUseCase {
 
   async execute(jobId: string): Promise<JobDetailsDTO | null> {
     const job = await this.jobRepository.findJobById(new JobId(jobId));
-    if (!job) return null;
+    if (!job) throw new Error("Job not found");
 
     return job.getDetails();
   }

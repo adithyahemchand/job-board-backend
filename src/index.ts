@@ -12,13 +12,11 @@ import { GetJobByIdUseCase } from "./application/job/GetJobByIdUseCase";
 import { GetJobsPaginatedUseCase } from "./application/job/GetJobsPaginatedUseCase";
 import { DeleteJobUseCase } from "./application/job/DeleteJobUseCase";
 import { MongoJobRepository } from "./infrastructure/job/MongoJobRepository";
+import { errorHandler } from "./interfaces/http/middlewares/errorHandler";
 
 dotenv.config();
 
 const app = express();
-
-connectMongo();
-
 app.use(express.json());
 app.use(cookieParser());
 
@@ -46,9 +44,25 @@ const jobController = new JobController(
 );
 
 app.use("/jobs", jobRoutes(jobController));
+app.use(errorHandler);
 
 const PORT = process.env.PORT ? Number(process.env.PORT) : 3000;
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+//Bootstrapping server after MongoDB connection
+async function bootstrap() {
+  try {
+    await connectMongo();
+    console.log(`[${new Date().toISOString()}] MongoDB connected`);
+
+    app.listen(PORT, () => {
+      console.log(
+        `[${new Date().toISOString()}] Server is running on port ${PORT}`
+      );
+    });
+  } catch (err) {
+    console.error(`[${new Date().toISOString()}] Failed to start server`, err);
+    process.exit(1);
+  }
+}
+
+bootstrap();
