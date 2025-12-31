@@ -9,14 +9,23 @@ export class GetJobsPaginatedUseCase {
   async execute(
     cursor: { postedDate: Date; jobId: string } | null
   ): Promise<JobListDTO> {
+    const safeLimit = PAGE_SIZE <= 0 ? 10 : Math.min(PAGE_SIZE, 20);
+
     // Fetch one extra record to determine if more data exists
-    const jobs = await this.jobRepository.findPaginated(cursor, PAGE_SIZE + 1);
+    const jobs = await this.jobRepository.findPaginated(cursor, safeLimit + 1);
 
-    const hasMore = jobs.length > PAGE_SIZE;
-    const pageItems = hasMore ? jobs.slice(0, PAGE_SIZE) : jobs;
+    const hasMore = jobs.length > safeLimit;
+    const pageItems = hasMore ? jobs.slice(0, safeLimit) : jobs;
 
-    const lastJob =
-      pageItems.length > 0 ? pageItems[pageItems.length - 1] : null;
+    if (pageItems.length === 0) {
+      return {
+        jobs: [],
+        lastCursor: null,
+        loadMore: false,
+      };
+    }
+
+    const lastJob = pageItems[pageItems.length - 1];
 
     return {
       jobs: pageItems.map((job) => {
