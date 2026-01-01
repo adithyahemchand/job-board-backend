@@ -31,7 +31,10 @@ const JobSchema = new Schema<JobDocument>(
   },
   {
     timestamps: false,
+    _id: false,
   }
 );
+
+JobSchema.add({ _id: String });
 
 export const JobModel = mongoose.model<JobDocument>("Job", JobSchema);

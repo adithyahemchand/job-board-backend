@@ -1,4 +1,7 @@
 import cors from "cors";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const frontendOrigin = process.env.FRONTEND_ORIGIN;
 

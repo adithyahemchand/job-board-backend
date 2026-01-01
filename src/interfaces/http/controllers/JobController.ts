@@ -14,38 +14,58 @@ export class JobController {
     private readonly deleteJob: DeleteJobUseCase
   ) {}
 
-  createJobHandler = async (req: Request, res: Response) => {
-    await this.createJob.execute(req.body);
-    res.status(201).json({ message: "Job created" });
-  };
-
-  updateJobHandler = async (req: Request, res: Response) => {
-    await this.updateJob.execute(req.params.id, req.body);
-    res.status(200).json({ message: "Job updated" });
-  };
-
-  getJobByIdHandler = async (req: Request, res: Response) => {
-    const job = await this.getJobById.execute(req.params.id);
-    if (!job) {
-      res.status(404).json({ message: "Job not found" });
-      return;
+  createJobHandler = async (req: Request, res: Response, next: any) => {
+    try {
+      await this.createJob.execute(req.body);
+      res.status(201).json({ message: "Job created" });
+    } catch (error) {
+      next(error);
     }
-    res.status(200).json(job);
   };
 
-  getJobsPaginatedHandler = async (req: Request, res: Response) => {
-    let cursor = null;
-
-    if (req.query.cursor) {
-      cursor = JSON.parse(req.query.cursor as string);
+  updateJobHandler = async (req: Request, res: Response, next: any) => {
+    try {
+      await this.updateJob.execute(req.params.id, req.body);
+      res.status(200).json({ message: "Job updated" });
+    } catch (error) {
+      next(error);
     }
-
-    const jobs = await this.getJobsPaginated.execute(cursor);
-    res.status(200).json(jobs);
   };
 
-  deleteJobHandler = async (req: Request, res: Response) => {
-    await this.deleteJob.execute(req.params.id);
-    res.status(204).send();
+  getJobByIdHandler = async (req: Request, res: Response, next: any) => {
+    try {
+      const job = await this.getJobById.execute(req.params.id);
+      if (!job) {
+        res.status(404).json({ message: "Job not found" });
+        return;
+      }
+      res.status(200).json(job);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  getJobsPaginatedHandler = async (req: Request, res: Response, next: any) => {
+    try {
+      let cursor = null;
+
+      if (req.query.cursor) {
+        cursor = JSON.parse(req.query.cursor as string);
+      }
+
+      const jobs = await this.getJobsPaginated.execute(cursor);
+      res.status(200).json(jobs);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  deleteJobHandler = async (req: Request, res: Response, next: any) => {
+    try {
+      await this.deleteJob.execute(req.params.id);
+      res.status(204).send();
+    } catch (error) {
+      next(error);
+    }
   };
 }

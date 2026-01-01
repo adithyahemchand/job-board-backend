@@ -4,21 +4,20 @@ import { JobId } from "../../domain/job/JobId";
 import { JobModel } from "./JobSchema";
 
 export class MongoJobRepository implements JobRepository {
+  // Jobs are identified by jobId; duplicate titles are allowed by design
   async saveJob(job: Job): Promise<void> {
     const details = job.getDetails();
 
-    await JobModel.updateOne(
-      { _id: details.jobId },
+    await JobModel.findByIdAndUpdate(
+      details.jobId,
       {
-        $set: {
-          title: details.title,
-          author: details.author,
-          postedDate: details.postedDate,
-          description: details.description,
-        },
+        title: details.title,
+        author: details.author,
+        postedDate: details.postedDate,
+        description: details.description,
       },
       // Using upsert to allow the same method to handle both create and update.
-      { upsert: true }
+      { upsert: true, new: true }
     );
   }
 

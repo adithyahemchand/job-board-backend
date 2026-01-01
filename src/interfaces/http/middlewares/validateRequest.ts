@@ -16,8 +16,10 @@ export function validateRequest(schema: ZodSchema, source: "body" | "query") {
       });
     }
 
-    // replace request data with validated data
-    req[source] = result.data;
+    // Only reassign writable properties (body)
+    if (source === "body") {
+      req[source] = result.data;
+    }
     next();
   };
 }
