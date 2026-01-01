@@ -50,7 +50,11 @@ export class JobController {
       let cursor = null;
 
       if (req.query.cursor) {
-        cursor = JSON.parse(req.query.cursor as string);
+        if (typeof req.query.cursor === "string") {
+          cursor = JSON.parse(req.query.cursor as string);
+        } else {
+          cursor = req.query.cursor as any;
+        }
       }
 
       const jobs = await this.getJobsPaginated.execute(cursor);

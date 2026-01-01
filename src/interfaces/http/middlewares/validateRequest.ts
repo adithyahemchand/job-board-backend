@@ -16,9 +16,12 @@ export function validateRequest(schema: ZodSchema, source: "body" | "query") {
       });
     }
 
-    // Only reassign writable properties (body)
     if (source === "body") {
       req[source] = result.data;
+    } else if (source === "query") {
+      try {
+        Object.assign(req.query as any, result.data);
+      } catch (e) {}
     }
     next();
   };

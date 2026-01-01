@@ -4,7 +4,6 @@ import { JobId } from "../../domain/job/JobId";
 import { JobModel } from "./JobSchema";
 
 export class MongoJobRepository implements JobRepository {
-  // Jobs are identified by jobId; duplicate titles are allowed by design
   async saveJob(job: Job): Promise<void> {
     const details = job.getDetails();
 
