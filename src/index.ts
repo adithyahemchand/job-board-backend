@@ -13,11 +13,13 @@ import { GetJobsPaginatedUseCase } from "./application/job/GetJobsPaginatedUseCa
 import { DeleteJobUseCase } from "./application/job/DeleteJobUseCase";
 import { MongoJobRepository } from "./infrastructure/job/MongoJobRepository";
 import { errorHandler } from "./interfaces/http/middlewares/errorHandler";
+import { corsMiddleware } from "./interfaces/http/middlewares/corsMiddleware";
 
 dotenv.config();
 
 const app = express();
 app.use(express.json());
+app.use(corsMiddleware);
 app.use(cookieParser());
 
 // Health check
