@@ -45,16 +45,6 @@ Business logic remains independent of framework and database details.
 
 ---
 
-## Environment Variables
-
-Create a `.env` file with the following values:
-
-PORT=3000  
-MONGO_URI=<your-mongodb-uri>  
-FRONTEND_ORIGIN=http://localhost:5173
-
----
-
 ## Setup & Run Locally
 
 Clone the repo:
@@ -62,6 +52,14 @@ Clone the repo:
 ```bash
 git clone <repo-url>
 cd <repo-folder>
+```
+
+Create a `.env` file with the following values:
+
+```bash
+PORT=<backend-port>
+MONGO_URI=<your-mongodb-uri>
+FRONTEND_ORIGIN=<your-frontend-url>
 ```
 
 Install and run:
