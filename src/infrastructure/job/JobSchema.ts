@@ -37,4 +37,6 @@ const JobSchema = new Schema<JobDocument>(
 
 JobSchema.add({ _id: String });
 
+JobSchema.index({ postedDate: -1, _id: -1 });
+
 export const JobModel = mongoose.model<JobDocument>("Job", JobSchema);
