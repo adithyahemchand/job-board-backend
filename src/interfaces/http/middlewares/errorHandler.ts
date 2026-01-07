@@ -21,7 +21,11 @@ export function errorHandler(
 
   if (err instanceof Error) {
     const msg = err.message || "";
-    if (msg.includes("Invalid cursor") || msg.includes("Invalid postedDate")) {
+    if (
+      msg.includes("Invalid cursor") ||
+      msg.includes("Invalid postedDate") ||
+      msg.includes("must be between")
+    ) {
       return res.status(400).json({ message: msg });
     }
   }
