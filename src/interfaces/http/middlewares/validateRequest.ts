@@ -20,7 +20,7 @@ export function validateRequest(schema: ZodSchema, source: "body" | "query") {
       req[source] = result.data;
     } else if (source === "query") {
       try {
-        Object.assign(req.query as any, result.data);
+        Object.assign(req.query as object, result.data);
       } catch (e) {}
     }
     next();

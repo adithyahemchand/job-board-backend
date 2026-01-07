@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import { CreateJobUseCase } from "../../../application/job/CreateJobUseCase";
 import { UpdateJobUseCase } from "../../../application/job/UpdateJobUseCase";
 import { GetJobByIdUseCase } from "../../../application/job/GetJobByIdUseCase";
@@ -14,7 +14,11 @@ export class JobController {
     private readonly deleteJob: DeleteJobUseCase
   ) {}
 
-  createJobHandler = async (req: Request, res: Response, next: any) => {
+  createJobHandler = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
     try {
       await this.createJob.execute(req.body);
       res.status(201).json({ message: "Job created" });
@@ -23,7 +27,11 @@ export class JobController {
     }
   };
 
-  updateJobHandler = async (req: Request, res: Response, next: any) => {
+  updateJobHandler = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
     try {
       await this.updateJob.execute(req.params.id, req.body);
       res.status(200).json({ message: "Job updated" });
@@ -32,7 +40,11 @@ export class JobController {
     }
   };
 
-  getJobByIdHandler = async (req: Request, res: Response, next: any) => {
+  getJobByIdHandler = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
     try {
       const job = await this.getJobById.execute(req.params.id);
       if (!job) {
@@ -45,7 +57,11 @@ export class JobController {
     }
   };
 
-  getJobsPaginatedHandler = async (req: Request, res: Response, next: any) => {
+  getJobsPaginatedHandler = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
     try {
       let cursor = null;
 
@@ -53,7 +69,7 @@ export class JobController {
         if (typeof req.query.cursor === "string") {
           cursor = JSON.parse(req.query.cursor as string);
         } else {
-          cursor = req.query.cursor as any;
+          cursor = req.query.cursor ?? null;
         }
       }
 
@@ -64,7 +80,11 @@ export class JobController {
     }
   };
 
-  deleteJobHandler = async (req: Request, res: Response, next: any) => {
+  deleteJobHandler = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
     try {
       await this.deleteJob.execute(req.params.id);
       res.status(204).send();

@@ -3,6 +3,13 @@ import { Job } from "../../domain/job/Job";
 import { JobId } from "../../domain/job/JobId";
 import { JobModel } from "./JobSchema";
 
+type JobCursorQuery = {
+  $or?: (
+    | { postedDate: { $lt: Date } }
+    | { postedDate: Date; _id: { $lt: string } }
+  )[];
+};
+
 export class MongoJobRepository implements JobRepository {
   async saveJob(job: Job): Promise<void> {
     const details = job.getDetails();
@@ -41,7 +48,7 @@ export class MongoJobRepository implements JobRepository {
     cursor: { postedDate: Date; jobId: string } | null,
     limit: number
   ): Promise<Job[]> {
-    const query: any = {};
+    const query: JobCursorQuery = {};
 
     if (cursor) {
       // fetch records strictly older than the last item from previous page
