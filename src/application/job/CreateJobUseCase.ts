@@ -2,6 +2,7 @@ import { JobRepository } from "../../domain/job/JobRepository";
 import { Job } from "../../domain/job/Job";
 import { JobId } from "../../domain/job/JobId";
 import { JobCreateDTO } from "./dto/JobCreateDTO";
+import { logger } from "../../shared/logger";
 
 export class CreateJobUseCase {
   constructor(private readonly jobRepository: JobRepository) {}
@@ -16,5 +17,6 @@ export class CreateJobUseCase {
     );
 
     await this.jobRepository.saveJob(job);
+    logger.info(`Job created with ID: ${job.getDetails().jobId}`);
   }
 }

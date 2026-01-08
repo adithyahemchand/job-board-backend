@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { ZodError } from "zod";
+import { logger } from "../../../shared/logger";
 
 export function errorHandler(
   err: unknown,
@@ -7,7 +8,7 @@ export function errorHandler(
   res: Response,
   _next: NextFunction
 ) {
-  console.error("Error:", err);
+  logger.error({ err }, " - Error occurred");
 
   if (err instanceof Error && err.message === "Job not found") {
     return res.status(404).json({ message: err.message });

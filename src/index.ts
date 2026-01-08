@@ -14,6 +14,7 @@ import { DeleteJobUseCase } from "./application/job/DeleteJobUseCase";
 import { MongoJobRepository } from "./infrastructure/job/MongoJobRepository";
 import { errorHandler } from "./interfaces/http/middlewares/errorHandler";
 import { corsMiddleware } from "./interfaces/http/middlewares/corsMiddleware";
+import { logger } from "./shared/logger";
 
 dotenv.config();
 
@@ -54,15 +55,13 @@ const PORT = process.env.PORT ? Number(process.env.PORT) : 3000;
 async function bootstrap() {
   try {
     await connectMongo();
-    console.log(`[${new Date().toISOString()}] MongoDB connected`);
+    logger.info("MongoDB connected");
 
     app.listen(PORT, () => {
-      console.log(
-        `[${new Date().toISOString()}] Server is running on port ${PORT}`
-      );
+      logger.info(`Server is running on port ${PORT}`);
     });
   } catch (err) {
-    console.error(`[${new Date().toISOString()}] Failed to start server`, err);
+    logger.error({ err }, ": Failed to start server");
     process.exit(1);
   }
 }

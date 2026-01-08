@@ -1,5 +1,6 @@
 import { JobRepository } from "../../domain/job/JobRepository";
 import { JobId } from "../../domain/job/JobId";
+import { logger } from "../../shared/logger";
 
 export class DeleteJobUseCase {
   constructor(private readonly jobRepository: JobRepository) {}
@@ -9,10 +10,11 @@ export class DeleteJobUseCase {
 
     const existingJob = await this.jobRepository.findJobById(id);
     if (!existingJob) {
-      // Application rule: deleting a non-existing job is an error
+      logger.error(`Attempted to delete non-existent job ID: ${jobId}`);
       throw new Error("Job not found");
     }
 
     await this.jobRepository.deleteJob(id);
+    logger.info(`Deleted job ID: ${jobId}`);
   }
 }

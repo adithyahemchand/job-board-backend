@@ -1,4 +1,5 @@
 import { JobRepository } from "../../domain/job/JobRepository";
+import { logger } from "../../shared/logger";
 import { JobListDTO } from "./dto/JobListDTO";
 
 const PAGE_SIZE = 10;
@@ -18,6 +19,7 @@ export class GetJobsPaginatedUseCase {
     const pageItems = hasMore ? jobs.slice(0, safeLimit) : jobs;
 
     if (pageItems.length === 0) {
+      logger.info("Returning empty job list.");
       return {
         jobs: [],
         lastCursor: null,
@@ -27,6 +29,7 @@ export class GetJobsPaginatedUseCase {
 
     const lastJob = pageItems[pageItems.length - 1];
 
+    logger.info("Returning paginated job list.");
     return {
       jobs: pageItems.map((job) => {
         const details = job.getDetails();
