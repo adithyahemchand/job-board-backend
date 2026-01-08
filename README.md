@@ -45,6 +45,20 @@ Business logic remains independent of framework and database details.
 
 ---
 
+## MongoDB Setup
+
+1. Install MongoDB Community Server: [https://www.mongodb.com/try/download/community](https://www.mongodb.com/try/download/community)
+2. Start MongoDB:
+
+   ```bash
+   mongod
+   ```
+
+3. Add the URI in your .env file. MongoDB will automatically create the database on first write.
+   example : mongodb://localhost:27017/job-board
+
+---
+
 ## Setup & Run Locally
 
 Clone the repo:
@@ -59,6 +73,7 @@ Create a `.env` file with the following values:
 ```bash
 PORT=<backend-port>
 MONGO_URI=<your-mongodb-uri>
+MONGO_TEST_URI=<your-mongodb-uri-for-tests>
 FRONTEND_ORIGIN=<your-frontend-url>
 ```
 
@@ -70,3 +85,19 @@ npm run dev
 ```
 
 The server exposes a `/health` endpoint for basic sanity checks.
+
+---
+
+## Testing
+
+Run the following command in the terminal:
+
+```bash
+npm run test
+```
+
+or, if you want to run in watch mode:
+
+```bash
+npm run test:watch
+```
