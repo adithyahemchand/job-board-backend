@@ -6,7 +6,12 @@ export class DeleteJobUseCase {
   constructor(private readonly jobRepository: JobRepository) {}
 
   async execute(jobId: string): Promise<void> {
-    const id = new JobId(jobId);
+    let id: JobId;
+    try {
+      id = new JobId(jobId);
+    } catch {
+      throw new Error("Job not found");
+    }
 
     const existingJob = await this.jobRepository.findJobById(id);
     if (!existingJob) {
