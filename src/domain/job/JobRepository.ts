@@ -1,5 +1,5 @@
 import { Job } from "./Job";
-import { JobId } from "./JobId";
+import { JobId } from "./valueObjects/JobId";
 
 export interface JobRepository {
   saveJob(job: Job): Promise<void>;

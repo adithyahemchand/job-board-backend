@@ -1,5 +1,5 @@
 import { JobRepository } from "../../domain/job/JobRepository";
-import { JobId } from "../../domain/job/JobId";
+import { JobId } from "../../domain/job/valueObjects/JobId";
 import { JobDetailsDTO } from "./dto/JobDetailsDTO";
 import { logger } from "../../shared/logger";
 
@@ -17,6 +17,12 @@ export class GetJobByIdUseCase {
     if (!job) throw new Error("Job not found");
 
     logger.info(`Returning details for job ID: ${jobId}`);
-    return job.getDetails();
+    return {
+      jobId: job.getId().toString(),
+      title: job.getTitle().getValue(),
+      author: job.getAuthor().getValue(),
+      postedDate: job.getPostedDate(),
+      description: job.getDescription().getValue(),
+    };
   }
 }

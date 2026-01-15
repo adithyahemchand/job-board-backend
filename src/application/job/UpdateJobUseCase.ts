@@ -1,7 +1,9 @@
 import { JobRepository } from "../../domain/job/JobRepository";
-import { JobId } from "../../domain/job/JobId";
+import { JobId } from "../../domain/job/valueObjects/JobId";
 import { JobUpdateDTO } from "./dto/JobUpdateDTO";
 import { logger } from "../../shared/logger";
+import { JobDescription } from "../../domain/job/valueObjects/JobDescription";
+import { JobTitle } from "../../domain/job/valueObjects/JobTitle";
 
 export class UpdateJobUseCase {
   constructor(private readonly jobRepository: JobRepository) {}
@@ -22,7 +24,10 @@ export class UpdateJobUseCase {
     }
 
     // Domain mutation — repository only persists final state
-    job.updateDetails(dto.title, dto.description);
+    job.updateDetails(
+      JobTitle.create(dto.title),
+      JobDescription.create(dto.description)
+    );
 
     logger.info(`Updated job ID: ${jobId}`);
     await this.jobRepository.saveJob(job);

@@ -1,96 +1,50 @@
-import { JobId } from "./JobId";
-
-export type JobDetails = {
-  jobId: string;
-  title: string;
-  author: string;
-  postedDate: Date;
-  description: string;
-};
+import { JobId } from "./valueObjects/JobId";
+import { JobTitle } from "./valueObjects/JobTitle";
+import { JobAuthor } from "./valueObjects/JobAuthor";
+import { JobDescription } from "./valueObjects/JobDescription";
 
 export class Job {
   private readonly jobId: JobId;
-  private title: string;
-  private author: string;
+  private title: JobTitle;
+  private author: JobAuthor;
   private postedDate: Date;
-  private description: string;
-
-  // Validation constraints
-  private static readonly TITLE_MIN = 1;
-  private static readonly TITLE_MAX = 100;
-  private static readonly AUTHOR_MIN = 1;
-  private static readonly AUTHOR_MAX = 50;
-  private static readonly DESCRIPTION_MIN = 1;
-  private static readonly DESCRIPTION_MAX = 2000;
+  private description: JobDescription;
 
   constructor(
     jobId: JobId,
-    title: string,
-    author: string,
+    title: JobTitle,
+    author: JobAuthor,
     postedDate: Date,
-    description: string
+    description: JobDescription
   ) {
-    this.validateFields(title, author, description);
-
     this.jobId = jobId;
     this.title = title;
     this.author = author;
     this.postedDate = postedDate;
     this.description = description;
   }
+  getId(): JobId {
+    return this.jobId;
+  }
 
-  updateDetails(title: string, description: string): void {
-    this.validateFields(title, this.author, description);
+  getTitle(): JobTitle {
+    return this.title;
+  }
 
+  getAuthor(): JobAuthor {
+    return this.author;
+  }
+
+  getPostedDate(): Date {
+    return this.postedDate;
+  }
+
+  getDescription(): JobDescription {
+    return this.description;
+  }
+
+  updateDetails(title: JobTitle, description: JobDescription): void {
     this.title = title;
     this.description = description;
-  }
-
-  getDetails(): JobDetails {
-    return {
-      jobId: this.jobId.toString(),
-      title: this.title,
-      author: this.author,
-      postedDate: this.postedDate,
-      description: this.description,
-    };
-  }
-
-  // Validation method
-  private validateFields(
-    title: string,
-    author: string,
-    description: string
-  ): void {
-    const trimmedTitle = title.trim();
-    const trimmedAuthor = author.trim();
-    const trimmedDescription = description.trim();
-
-    if (
-      trimmedTitle.length < Job.TITLE_MIN ||
-      trimmedTitle.length > Job.TITLE_MAX
-    ) {
-      throw new Error(
-        `Job title must be between ${Job.TITLE_MIN} and ${Job.TITLE_MAX} characters`
-      );
-    }
-
-    if (
-      trimmedAuthor.length < Job.AUTHOR_MIN ||
-      trimmedAuthor.length > Job.AUTHOR_MAX
-    ) {
-      throw new Error(
-        `Job author must be between ${Job.AUTHOR_MIN} and ${Job.AUTHOR_MAX} characters`
-      );
-    }
-
-    if (
-      trimmedDescription.length < Job.DESCRIPTION_MIN ||
-      trimmedDescription.length > Job.DESCRIPTION_MAX
-    ) {
-      throw new Error(
-        `Job description must be between ${Job.DESCRIPTION_MIN} and ${Job.DESCRIPTION_MAX} characters`
-      );
-    }
   }
 }

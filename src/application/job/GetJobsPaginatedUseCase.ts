@@ -32,18 +32,17 @@ export class GetJobsPaginatedUseCase {
     logger.info("Returning paginated job list.");
     return {
       jobs: pageItems.map((job) => {
-        const details = job.getDetails();
         return {
-          jobId: details.jobId,
-          title: details.title,
-          author: details.author,
-          postedDate: details.postedDate,
+          jobId: job.getId().toString(),
+          title: job.getTitle().getValue(),
+          author: job.getAuthor().getValue(),
+          postedDate: job.getPostedDate(),
         };
       }),
       lastCursor: lastJob
         ? {
-            postedDate: lastJob.getDetails().postedDate,
-            jobId: lastJob.getDetails().jobId,
+            postedDate: lastJob.getPostedDate(),
+            jobId: lastJob.getId().toString(),
           }
         : null,
       loadMore: hasMore,

@@ -1,5 +1,5 @@
 import { JobRepository } from "../../domain/job/JobRepository";
-import { JobId } from "../../domain/job/JobId";
+import { JobId } from "../../domain/job/valueObjects/JobId";
 import { logger } from "../../shared/logger";
 
 export class DeleteJobUseCase {

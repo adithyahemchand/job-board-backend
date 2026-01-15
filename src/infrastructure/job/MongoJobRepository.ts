@@ -1,7 +1,10 @@
 import { JobRepository } from "../../domain/job/JobRepository";
 import { Job } from "../../domain/job/Job";
-import { JobId } from "../../domain/job/JobId";
+import { JobId } from "../../domain/job/valueObjects/JobId";
 import { JobModel } from "./JobSchema";
+import { JobTitle } from "../../domain/job/valueObjects/JobTitle";
+import { JobAuthor } from "../../domain/job/valueObjects/JobAuthor";
+import { JobDescription } from "../../domain/job/valueObjects/JobDescription";
 
 type JobCursorQuery = {
   $or?: (
@@ -12,15 +15,13 @@ type JobCursorQuery = {
 
 export class MongoJobRepository implements JobRepository {
   async saveJob(job: Job): Promise<void> {
-    const details = job.getDetails();
-
     await JobModel.findByIdAndUpdate(
-      details.jobId,
+      job.getId().toString(),
       {
-        title: details.title,
-        author: details.author,
-        postedDate: details.postedDate,
-        description: details.description,
+        title: job.getTitle().getValue(),
+        author: job.getAuthor().getValue(),
+        postedDate: job.getPostedDate(),
+        description: job.getDescription().getValue(),
       },
       // Using upsert to allow the same method to handle both create and update.
       { upsert: true, new: true }
@@ -33,10 +34,10 @@ export class MongoJobRepository implements JobRepository {
 
     return new Job(
       new JobId(doc._id.toString()),
-      doc.title,
-      doc.author,
+      JobTitle.create(doc.title),
+      JobAuthor.create(doc.author),
       doc.postedDate,
-      doc.description
+      JobDescription.create(doc.description)
     );
   }
 
@@ -70,10 +71,10 @@ export class MongoJobRepository implements JobRepository {
       (doc) =>
         new Job(
           new JobId(doc._id.toString()),
-          doc.title,
-          doc.author,
+          JobTitle.create(doc.title),
+          JobAuthor.create(doc.author),
           doc.postedDate,
-          doc.description
+          JobDescription.create(doc.description)
         )
     );
   }
